@@ -2,179 +2,115 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapi Chapa</title>
-<meta name="description" content="Sito ufficiale della squadra di fantacalcio Mapi Chapa.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapi Chapa | Strategic Sports Management</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <style>
-  :root {
-    --bg: #ffffff;
-    --ink: #1d1d1b;
-    --mute: #6b6b6b;
-    --display: "Anton", Impact, "Arial Narrow", sans-serif;
-    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--body);
-    line-height: 1.5;
-  }
-  a { color: inherit; }
-  a:focus-visible { outline: 4px solid var(--ink); outline-offset: 4px; }
-
-  /* Logo */
-  .hero {
-    min-height: 78vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6vh 5vw;
-  }
-  .hero img {
-    width: min(92vw, 1100px);
-    height: auto;
-    display: block;
-  }
-
-  /* Menu */
-  .menu { border-bottom: 4px solid var(--ink); }
-  .menu a {
-    display: block;
-    padding: clamp(14px, 3vw, 28px) 5vw;
-    border-top: 4px solid var(--ink);
-    font-family: var(--display);
-    font-size: clamp(2.6rem, 10vw, 6.5rem);
-    line-height: 1.05;
-    text-decoration: none;
-    transition: background-color .15s, color .15s;
-  }
-  .menu a:hover, .menu a:focus-visible {
-    background: var(--ink);
-    color: var(--bg);
-    outline-offset: -8px;
-  }
-
-  /* Sezioni */
-  section { padding: 10vh 5vw; max-width: 1200px; margin: 0 auto; }
-  h2 {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(2.4rem, 7vw, 4.5rem);
-    margin: 0 0 1.5rem;
-    line-height: 1.05;
-  }
-  h3 {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: 1.6rem;
-    margin: 0 0 .6rem;
-  }
-  .roster {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 2.5rem 3rem;
-  }
-  .roster ul { list-style: none; margin: 0; padding: 0; }
-  .roster li {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: .45rem 0;
-    border-top: 1px solid var(--ink);
-    font-weight: 600;
-  }
-  .roster li span { font-weight: 400; color: var(--mute); }
-  .contact p { max-width: 60ch; margin: 0 0 1rem; }
-  .contact a { font-weight: 600; }
-
-  footer {
-    padding: 3rem 5vw;
-    border-top: 4px solid var(--ink);
-    font-size: .9rem;
-    color: var(--mute);
-  }
+  :root { box-sizing: border-box; color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { margin: 0; background: #fff; color: #111; font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  @keyframes enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .enter { animation: enter .3s ease-out; }
+  @media (prefers-reduced-motion: reduce) { .enter { animation: none; } }
+  button:focus-visible, a:focus-visible { outline: 3px solid #111; outline-offset: 2px; }
 </style>
 </head>
 <body>
+<div id="root"></div>
+<script>
+const { useState, useEffect } = React, h = React.createElement;
+const LOGO = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGl2ZWxsb18yIiBkYXRhLW5hbWU9IkxpdmVsbG8gMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMzM1LjcyIDgxLjM2Ij4KICA8ZyBpZD0iTGl2ZWxsb18xLTIiIGRhdGEtbmFtZT0iTGl2ZWxsbyAxIj4KICAgIDxnPgogICAgICA8cGF0aCBkPSJNMjQuNTIsMjQuODZMMjcuOCwxLjEzaDE3LjE4djc5LjFoLTEyLjA5di0yOS42MWMwLTkuOTQuNDUtMTkuMS45LTI4LjkzLTEuMTMsOS44My0yLjE1LDE4Ljk5LTMuMzksMjguODJsLTQuMjksMjkuNzJoLTguOTNsLTQuMjktMjkuNzJjLTEuMjQtOS44My0yLjI2LTE4Ljk5LTMuMzktMjguODIuNDUsOS44My45LDE4Ljk5LjksMjguOTN2MjkuNjFIMFYxLjEzaDE3LjUybDMuMTYsMjMuNzNjLjc5LDUuNzYsMS41OCwxMy4yMiwxLjkyLDE5Ljc4LjQ1LTYuNTUsMS4yNC0xNC4wMSwxLjkyLTE5Ljc4WiIgZmlsbD0iIzFkMWQxYiIvPgogICAgICA8cGF0aCBkPSJNNzAuNTEsNzAuNTJoLTkuNDlsLTEuMTMsOS43MmgtMTEuNDFMNTguMzEsMS4xM2gxNi4wNWw5LjgzLDc5LjFoLTEyLjQzbC0xLjI0LTkuNzJaTTYyLjI2LDYwLjEyaDcuMDFsLS45LTguMDJjLTEuMTMtOS43Mi0xLjgxLTIwLjU3LTIuNi0zMS41My0uNzksMTAuOTYtMS40NywyMS44MS0yLjYsMzEuNTNsLS45LDguMDJaIiBmaWxsPSIjMWQxZDFiIi8+CiAgICAgIDxwYXRoIGQ9Ik0xMDAuMjMsODAuMjNoLTEyLjMyVjEuMTNoMTUuNTljNy45MSwwLDE2LjA1LDIuNiwxNi4wNSwxNS4zN3YxOS4zMmMwLDEyLjc3LTguMTQsMTUuNDgtMTYuMDUsMTUuNDhoLTMuMjh2MjguOTNaTTEwMC4yMywxMS45OHYyOC40OGgyLjgyYzIuOTQsMCw0LjE4LTEuMTMsNC4xOC00LjE4di0yMC4xMmMwLTMuMDUtMS4yNC00LjE4LTQuMTgtNC4xOGgtMi44MloiIGZpbGw9IiMxZDFkMWIiLz4KICAgICAgPHBhdGggZD0iTTEyMy44NCwxLjEzaDEyLjMydjc5LjFoLTEyLjMyVjEuMTNaIiBmaWxsPSIjMWQxZDFiIi8+CiAgICAgIDxwYXRoIGQ9Ik0xNzQuNDcsNzAuNTJjMi40OSwwLDMuNjItMS4zNiwzLjYyLTQuMDd2LTIwLjIzaDExLjQxdjE4LjQyYzAsMTEuMy01LjMxLDE2LjcyLTE1LjQ4LDE2Ljcycy0xNS41OS01LjQyLTE1LjU5LTE2LjcyVjE2LjczYzAtMTEuMyw1LjQyLTE2LjczLDE1LjU5LTE2LjczczE1LjQ4LDUuNDIsMTUuNDgsMTYuNzN2MTYuMTZoLTExLjQxVjE0LjkyYzAtMi43MS0xLjEzLTQuMDctMy42Mi00LjA3cy0zLjczLDEuMzYtMy43Myw0LjA3djUxLjUzYzAsMi43MSwxLjEzLDQuMDcsMy43Myw0LjA3WiIgZmlsbD0iIzFkMWQxYiIvPgogICAgICA8cGF0aCBkPSJNMjA3LjAxLDgwLjIzaC0xMi4zMlYxLjEzaDEyLjMydjMyLjU1aDcuMzVWMS4xM2gxMi4zMnY3OS4xaC0xMi4zMnYtMzUuODJoLTcuMzV2MzUuODJaIiBmaWxsPSIjMWQxZDFiIi8+CiAgICAgIDxwYXRoIGQ9Ik0yNTIuMjEsNzAuNTJoLTkuNDlsLTEuMTMsOS43MmgtMTEuNDFMMjQwLjAxLDEuMTNoMTYuMDVsOS44Myw3OS4xaC0xMi40M2wtMS4yNC05LjcyWk0yNDMuOTYsNjAuMTJoNy4wMWwtLjktOC4wMmMtMS4xMy05LjcyLTEuODEtMjAuNTctMi42LTMxLjUzLS43OSwxMC45Ni0xLjQ3LDIxLjgxLTIuNiwzMS41M2wtLjksOC4wMloiIGZpbGw9IiMxZDFkMWIiLz4KICAgICAgPHBhdGggZD0iTTI4MS45Myw4MC4yM2gtMTIuMzJWMS4xM2gxNS41OWM3LjkxLDAsMTYuMDUsMi42LDE2LjA1LDE1LjM3djE5LjMyYzAsMTIuNzctOC4xNCwxNS40OC0xNi4wNSwxNS40OGgtMy4yOHYyOC45M1pNMjgxLjkzLDExLjk4djI4LjQ4aDIuODNjMi45NCwwLDQuMTgtMS4xMyw0LjE4LTQuMTh2LTIwLjEyYzAtMy4wNS0xLjI0LTQuMTgtNC4xOC00LjE4aC0yLjgzWiIgZmlsbD0iIzFkMWQxYiIvPgogICAgICA8cGF0aCBkPSJNMzIyLjA0LDcwLjUyaC05LjQ5bC0xLjEzLDkuNzJoLTExLjQxTDMwOS44NCwxLjEzaDE2LjA1bDkuODMsNzkuMWgtMTIuNDNsLTEuMjQtOS43MlpNMzEzLjc5LDYwLjEyaDcuMDFsLS45LTguMDJjLTEuMTMtOS43Mi0xLjgxLTIwLjU3LTIuNi0zMS41My0uNzksMTAuOTYtMS40NywyMS44MS0yLjYsMzEuNTNsLS45LDguMDJaIiBmaWxsPSIjMWQxZDFiIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4=";
+const EMAIL = "info.mapichapa@gmail.com";
+const MENU = [["rosa","ROSA"],["servizi","SERVIZI"],["music","MUSIC"],["shop","SHOP"],["about","ABOUT"],["contact","CONTACT"]];
+const ROSA = [
+  ["Portieri", ["Svilar","De Marzi","Gollini"]],
+  ["Difensori", ["Gila","Valeri","Zortea","Marusic","Zè Pedro","Hainaut","Kelly L.","Kabasele"]],
+  ["Centrocampisti", ["Paz N.","Milla","Vlasic","Cacciamani","Taylor K.","Alajbegovic","Bernabè","Mbangula"]],
+  ["Attaccanti", ["Ramos G.","Camarda","Douvikas","Boga","Lucca","Vitinha O."]]
+];
+const SERVIZI = [
+  ["Mapi Ball System & Predictive Analytics", "Implementazione del nostro algoritmo proprietario per la modellizzazione quantitativa dei match. Il sistema analizza lo storico delle prestazioni, le metriche individuali e l’indice di incidenza dei bonus/malus per prevedere l’andamento delle giornate. Questo servizio trasforma l’incertezza del campo in un piano operativo preciso, permettendo alla dirigenza di schierare la formazione ottimale ed eliminare qualsiasi margine di errore umano o emotivo."],
+  ["Strategic Turnover & Resource Optimization", "Pianificazione avanzata dei carichi di lavoro e gestione aziendale del capitale umano. Attraverso l’analisi del coefficiente di difficoltà degli avversari, calcoliamo la soglia minima di rendimento necessaria per la vittoria. Questo ci consente di concedere permessi retribuiti e turni di riposo strategici ai top player della rosa (come Nico Paz e Alajbegovic) senza mai compromettere i tre punti, preservando l’organico per i match a più alto coefficiente di rischio."],
+  ["Corporate Brand Identity & Crisis Management", "Sviluppo, gestione e tutela dell’immagine pubblica dei club sotto la nostra holding. Curiamo la comunicazione ufficiale, il posizionamento mediatico sui canali social e le strategie di risposta alla community e alla stampa. Trasformiamo le scelte gestionali in una dimostrazione di superiorità tattica, mantenendo sempre un tono di voce aziendale, solido e inattaccabile."]
+];
+const GENRES = ["Reggae","Blues","Funk","Trap","Techno","Neomelodico"];
 
-<header class="hero">
-  <img src="logo.svg" alt="Mapi Chapa" width="336" height="81">
-</header>
+const Header = (p) => h("div", { className: "flex items-center gap-3 border-b border-black py-2 text-xs font-extrabold tracking-wide" },
+  p.onClose && h("button", { onClick: p.onClose, "aria-label": "Torna al menu", className: "-ml-1 p-1 hover:opacity-60" }, h("svg", { width: 22, height: 22, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, "aria-hidden": "true" }, h("path", { d: "M19 12H5M11 5l-7 7 7 7" }))),
+  h("span", null, p.label));
 
-<nav class="menu" aria-label="Menu principale">
-  <a href="#rosa">Rosa</a>
-  <a href="https://www.instagram.com/mapi_chapa/" target="_blank" rel="noopener">Instagram</a>
-  <a href="#contatti">Contatti</a>
-</nav>
+const Row = (a, b) => h("div", { key: a, className: "flex justify-between gap-4 border-b border-black py-2 text-sm" },
+  h("span", { className: "text-neutral-500" }, a), h("span", { className: "text-right font-semibold" }, b));
 
-<main>
-  <section id="rosa">
-    <h2>Rosa</h2>
-    <div class="roster">
-      <div>
-        <h3>Portieri</h3>
-        <ul>
-          <li>Svilar <span>Roma</span></li>
-          <li>De Marzi <span>Roma</span></li>
-          <li>Gollini <span>Roma</span></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Difensori</h3>
-        <ul>
-          <li>Gila <span>Milan</span></li>
-          <li>Valeri <span>Parma</span></li>
-          <li>Zortea <span>Bologna</span></li>
-          <li>Marusic <span>Lazio</span></li>
-          <li>Zè Pedro <span>Cagliari</span></li>
-          <li>Hainaut <span>Venezia</span></li>
-          <li>Kelly L. <span>Juventus</span></li>
-          <li>Kabasele <span>Udinese</span></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Centrocampisti</h3>
-        <ul>
-          <li>Paz N. <span>Como</span></li>
-          <li>Milla <span>Como</span></li>
-          <li>Vlasic <span>Torino</span></li>
-          <li>Cacciamani <span>Torino</span></li>
-          <li>Taylor K. <span>Lazio</span></li>
-          <li>Alajbegovic <span>Juventus</span></li>
-          <li>Bernabè <span>Parma</span></li>
-          <li>Mbangula <span>Bologna</span></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Attaccanti</h3>
-        <ul>
-          <li>Ramos G. <span>Milan</span></li>
-          <li>Camarda <span>Milan</span></li>
-          <li>Douvikas <span>Como</span></li>
-          <li>Boga <span>Juventus</span></li>
-          <li>Lucca <span>Napoli</span></li>
-          <li>Vitinha O. <span>Genoa</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
+const Big = (t) => h("p", { className: "text-5xl font-extrabold leading-none tracking-tight sm:text-7xl" }, t);
 
-  <section id="contatti" class="contact">
-    <h2>Contatti</h2>
-    <p>Vuoi sfidarci o scriverci? Contattaci così:</p>
-    <p>Email: <a href="mailto:info.mapichapa@gmail.com">info.mapichapa@gmail.com</a></p>
-    <p>WhatsApp: <a href="https://wa.me/393927687045" target="_blank" rel="noopener">392 768 7045</a></p>
-  </section>
-</main>
+const Rosa = () => h("div", null,
+  h("div", { className: "mb-8" }, Row("Club", "AC pazzo dio"), Row("Allenatore", "Pika"), Row("Presidente", "Chapa"), Row("Rosa", "25 giocatori · 3 P · 8 D · 8 C · 6 A")),
+  h("div", { className: "grid gap-8 sm:grid-cols-2" }, ROSA.map(([role, list]) =>
+    h("section", { key: role },
+      h("h3", { className: "flex justify-between border-b-2 border-black pb-1 text-lg font-extrabold" }, h("span", null, role), h("span", null, list.length)),
+      list.map((n) => h("div", { key: n, className: "border-b border-black py-2 text-sm font-semibold" }, n))))));
 
-<footer>Mapi Chapa</footer>
+const Servizi = () => h("div", null, SERVIZI.map(([t, d], i) =>
+  h("section", { key: t, className: "border-t border-black py-6" },
+    h("p", { className: "mb-2 text-xs font-extrabold" }, "0" + (i + 1)),
+    h("h3", { className: "mb-3 text-2xl font-extrabold leading-tight tracking-tight" }, t),
+    h("p", { className: "max-w-prose text-[15px] leading-relaxed" }, d))));
 
+const Music = () => h("div", null,
+  Big("COMING SOON"),
+  h("div", { className: "my-6 flex flex-wrap gap-2" }, GENRES.map((g) => h("span", { key: g, className: "border border-black px-3 py-1 text-xs font-extrabold" }, g.toUpperCase()))),
+  [1, 2, 3].map((n) => h("div", { key: n, className: "flex items-center gap-4 border-t border-black py-4 opacity-60" },
+    h("button", { disabled: true, "aria-label": "Play (presto disponibile)", className: "flex h-10 w-10 items-center justify-center border border-black text-sm" }, "▶"),
+    h("div", { className: "flex-1" }, h("p", { className: "text-sm font-extrabold" }, "Track 0" + n), h("div", { className: "mt-2 h-px bg-black" })),
+    h("span", { className: "text-xs font-semibold" }, "0:00"))));
+
+const Shop = () => h("div", null,
+  Big("COMING SOON"),
+  h("div", { className: "mt-6 grid grid-cols-2 gap-3" }, [1, 2, 3, 4].map((n) => h("div", { key: n, className: "flex aspect-square items-end border border-black p-3 text-xs font-extrabold" }, "ITEM 0" + n))));
+
+const About = () => h("div", null,
+  h("h2", { className: "text-xl font-extrabold" }, "Mapi Chapa | Strategic Sports Management"),
+  h("p", { className: "mb-6 mt-1 text-sm text-neutral-500" }, "About Us"),
+  h("div", { className: "max-w-prose space-y-4 border-t border-black pt-6 text-[15px] leading-relaxed" },
+    h("p", null, "Mapi Chapa è la holding di gestione strategica e corporate analytics responsabile delle prestazioni sportive di club d’élite, tra cui la primatista AC pazzo dio."),
+    h("p", null, "Fondata sull’integrazione tra intelligenza dei dati e leadership direzionale, Mapi Chapa trasforma la gestione della rosa in un modello aziendale ad alto rendimento. Il nostro obiettivo è eliminare la componente di casualità dallo sport, pianificando ogni successo attraverso la fredda precisione dell’analisi e la gestione scientifica delle risorse.")));
+
+const Contact = () => h("div", null,
+  Row("Email", h("a", { href: "mailto:" + EMAIL, className: "underline" }, EMAIL)),
+  Row("Phone / Direct Line", h("a", { href: "tel:+393927687045", className: "underline" }, "+39 3927687045")),
+  Row("Headquarters", "Milan, Italy"),
+  Row("Division", "Strategic Management Division for AC pazzo dio"));
+
+const PAGES = { rosa: ["Rosa", Rosa], servizi: ["I Nostri Servizi", Servizi], music: ["Music", Music], shop: ["Shop", Shop], about: ["About", About], contact: ["Contact", Contact] };
+
+function App() {
+  const [view, setView] = useState("home");
+  const go = (v) => { setView(v); window.scrollTo(0, 0); };
+  useEffect(() => {
+    const k = (e) => { if (e.key === "Escape") go("home"); };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, []);
+  const wrap = "enter mx-auto w-full max-w-2xl px-5 pt-3 ";
+  if (view === "home") return h("div", { key: "home", className: wrap + "flex min-h-screen flex-col pb-5" },
+    h(Header, { label: "MAPI CHAPA HOLDING" }),
+    h("nav", null, MENU.map(([id, label]) => h("button", { key: id, onClick: () => go(id), className: "block w-full border-b border-black py-2 text-left text-[2.6rem] font-extrabold leading-none tracking-tight transition-all hover:pl-3 sm:text-6xl" }, label))),
+    h("div", { className: "flex-1" }),
+    h("a", { href: "mailto:" + EMAIL, className: "mt-10 block border-b border-black pb-2 text-xs font-extrabold" }, EMAIL),
+    h("img", { src: LOGO, alt: "Mapi Chapa", className: "mt-3 block w-full" }));
+  const [title, Page] = PAGES[view];
+  return h("div", { key: view, className: wrap + "pb-20" },
+    h(Header, { label: "MAPI CHAPA HOLDING / " + title.toUpperCase(), onClose: () => go("home") }),
+    h("h1", { className: "mb-8 mt-6 text-4xl font-extrabold leading-none tracking-tight sm:text-6xl" }, title),
+    h(Page));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+</script>
 </body>
 </html>
